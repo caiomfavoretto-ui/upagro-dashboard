@@ -8,7 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--verde:#1D9E75;--vl:#E1F5EE;--vd:#085041;--vm:#0F6E56;--am:#BA7517;--al:#FAEEDA;--co:#D85A30;--bg:#F4F3EF;--wh:#fff;--tx:#1a1a18;--tm:#888780;--bd:rgba(0,0,0,0.09);--fn:'Syne',sans-serif;--mo:'DM Mono',monospace;--r:12px}
+:root{--vd:#085041;--vm:#0F6E56;--verde:#1D9E75;--vl:#E1F5EE;--am:#BA7517;--al:#FAEEDA;--bg:#F4F3EF;--wh:#fff;--tx:#1a1a18;--tm:#888780;--bd:rgba(0,0,0,0.09);--fn:'Syne',sans-serif;--mo:'DM Mono',monospace;--r:12px}
 body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh}
 .topbar{background:var(--vd);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-size:14px;font-weight:700;color:#9FE1CB;letter-spacing:.12em;text-transform:uppercase}
@@ -70,7 +70,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
 .fb{font-family:var(--mo);font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase}
 .fs{display:flex;align-items:center;gap:6px;font-family:var(--mo);font-size:10px;color:#5DCAA5}
 .eb{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;font-family:var(--mo);font-size:11px;color:#856404;margin-bottom:12px}
-.empty{text-align:center;padding:32px;color:var(--tm);font-family:var(--mo);font-size:12px}
 @media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}.g2,.g2b{grid-template-columns:1fr}.tg{grid-template-columns:repeat(2,1fr)}.content,.topbar,.filters,.hero{padding-left:16px;padding-right:16px}}
 </style>
 </head>
@@ -101,23 +100,26 @@ function sl(p,m){document.getElementById('lf').style.width=p+'%';document.getEle
 function hl(){setTimeout(()=>document.getElementById('ls').classList.add('hide'),400)}
 function brl(n){return(n||n===0)?'R$ '+Math.round(n).toLocaleString('pt-BR'):'—'}
 function brh(n){return(n||n===0)?'R$ '+Math.round(n).toLocaleString('pt-BR')+'/ha':'—'}
+
 function fmtData(v){
-  if(!v)return'—';
-  if(typeof v==='string')return v;
-  const m=String(v).match(/Date\((\d+),(\d+),(\d+)\)/);
-  if(m)return String(m[3]).padStart(2,'0')+'/'+(parseInt(m[2])+1).toString().padStart(2,'0')+'/'+m[1];
+  if(!v)return '—';
+  if(typeof v==='string'){
+    const m=v.match(/Date\((\d+),(\d+),(\d+)\)/);
+    if(m)return String(m[3]).padStart(2,'0')+'/'+(parseInt(m[2])+1).toString().padStart(2,'0')+'/'+m[1];
+    return v;
+  }
   return String(v);
 }
-async function fa(a){
-  const url='https://docs.google.com/spreadsheets/d/'+CFG.SHEET_ID+'/gviz/tq?tqx=out:json&sheet='+encodeURIComponent(a);
-  const r=await fetch(url);
+
+async function fetchAba(a){
+  const r=await fetch('https://docs.google.com/spreadsheets/d/'+CFG.SHEET_ID+'/gviz/tq?tqx=out:json&sheet='+encodeURIComponent(a));
   if(!r.ok)throw new Error('Erro '+r.status);
   const t=await r.text();
-  const clean=t.replace(/^[^{]*/,'').replace(/[);\s]*$/,'');
-  const j=JSON.parse(clean);
+  const j=JSON.parse(t.replace(/^[^{]*/,'').replace(/\);?\s*$/,''));
   const cols=j.table.cols.map(c=>c.label);
   return j.table.rows.filter(r=>r&&r.c&&r.c.some(c=>c&&c.v!==null)).map(r=>{const o={};r.c.forEach((c,i)=>{o[cols[i]]=c?c.v:null});return o});
 }
+
 function render(data){
   const d=FA==='todos'?data:data.filter(l=>(l['Cultura']||'').toLowerCase()===FA);
   const cults=[...new Set(data.map(l=>l['Cultura']).filter(Boolean))];
@@ -133,7 +135,7 @@ function render(data){
   document.getElementById('kpis').innerHTML=[
     {l:'Custo total lançado',v:brl(vt),s:nl+' lançamentos',c:'#1D9E75'},
     {l:'Custo médio R$/ha',v:ch>0?brh(ch):'—',s:'Média ponderada',c:ch>CFG.META?'#D85A30':'#1D9E75'},
-    {l:'Área monitorada',v:CFG.HA.toLocaleString('pt-BR')+' ha',s:CFG.TALHOES.length+' talhões',c:'#378ADD'},
+    {l:'Área monitorada',v:CFG.HA.toLocaleString('pt-BR')+' ha',s:CFG.TALHOES.length+' talhões ativos',c:'#378ADD'},
     {l:'Lançamentos',v:nl,s:'Período atual',c:'#BA7517'}
   ].map(k=>'<div class="kpi"><div class="kl">'+k.l+'</div><div class="kv">'+k.v+'</div><div class="ks">'+k.s+'</div><div class="kb" style="background:'+k.c+'"></div></div>').join('');
   const pc={};d.forEach(l=>{const c=l['Categoria']||'Outro';const v=parseFloat(l['Valor Total'])||0;const h=parseFloat(l['Área (ha)'])||1;if(!pc[c])pc[c]={t:0,h:0};pc[c].t+=v;pc[c].h+=h});
@@ -145,27 +147,29 @@ function render(data){
   if(TC)TC.destroy();
   TC=new Chart(document.getElementById('tc2'),{type:'bar',data:{labels:tl,datasets:[{data:tv,backgroundColor:tc,borderRadius:4,borderSkipped:false},{data:tl.map(()=>CFG.META),type:'line',borderColor:'#BA7517',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#888'}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#888',callback:v=>'R$'+v}}}}});
   const ul=[...d].reverse().slice(0,6);
-  document.getElementById('lanclist').innerHTML=ul.length===0?'<div class="empty">Nenhum lançamento</div>':ul.map(l=>{const c2=cc2(l['Categoria']||'Outro');return '<div class="li" style="border-left-color:'+c2.b+'"><div class="lic" style="background:'+c2.bg+';color:'+c2.tx+'">'+(l['Categoria']||'Ou').substring(0,2).toUpperCase()+'</div><div class="lin"><div class="lp">'+(l['Produto']||'—')+'</div><div class="lm2">'+(l['Quantidade']||'?')+' '+(l['Unidade']||'')+' · '+(l['Área (ha)']||'?')+' ha · '+(l['Cultura']||'—')+'</div></div><div class="lr"><div class="lt">'+(l['Talhão']||'Geral')+'</div><div class="ld2">'+fmtData(l['Data'])+'</div></div></div>';}).join('');
+  document.getElementById('lanclist').innerHTML=ul.length===0?'<div style="text-align:center;padding:32px;color:var(--tm);font-family:var(--mo);font-size:12px">Nenhum lançamento</div>':ul.map(l=>{const c2=cc2(l['Categoria']||'Outro');return '<div class="li" style="border-left-color:'+c2.b+'"><div class="lic" style="background:'+c2.bg+';color:'+c2.tx+'">'+(l['Categoria']||'Ou').substring(0,2).toUpperCase()+'</div><div class="lin"><div class="lp">'+(l['Produto']||'—')+'</div><div class="lm2">'+(l['Área (ha)']||'?')+' ha · '+(l['Cultura']||'—')+'</div></div><div class="lr"><div class="lt">'+(l['Talhão']||'Geral')+'</div><div class="ld2">'+fmtData(l['Data'])+'</div></div></div>';}).join('');
   const alts=[];tl.forEach((t,i)=>{if(tv[i]>CFG.META)alts.push({t:'warn',ti:'Meta ultrapassada — '+t,d:'R$ '+tv[i]+'/ha (meta: R$ '+CFG.META+'/ha)'})});
-  if(alts.length===0)alts.push({t:'info',ti:'Custos dentro da meta',d:'Todos os talhões abaixo da meta'});
+  if(!alts.length)alts.push({t:'info',ti:'Custos dentro da meta',d:'Todos os talhões abaixo da meta'});
   document.getElementById('alts').innerHTML=alts.map(a=>'<div class="al a'+a.t+'"><div class="at">'+a.ti+'</div><div class="ad">'+a.d+'</div></div>').join('');
   document.getElementById('tg').innerHTML=CFG.TALHOES.map(t=>{const dd=pt[t.id];const cu=dd&&dd.h>0?Math.round(dd.t/dd.h):null;const ov=cu&&cu>CFG.META;return '<div class="tc" style="'+(ov?'background:#FAECE7;border-color:#F0997B':'')+'"><div class="ti" style="color:'+(ov?'#993C1D':'#085041')+'">'+t.id+'</div><div class="th">'+t.ha+' ha</div><div class="tk" style="color:'+(cu?(ov?'#D85A30':'#1D9E75'):'#aaa')+'">'+(cu?'R$ '+cu+'/ha':'sem dados')+'</div></div>';}).join('');
   document.getElementById('si').textContent='Atualizado '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 }
+
 function setF(f,b){FA=f;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');render(ALL)}
+
 async function main(){
   try{
     sl(20,'Buscando lançamentos...');
-    const rows=await fa('Saídas');
+    const rows=await fetchAba('Saídas');
     sl(70,'Processando...');
     ALL=rows.filter(r=>r['Produto']||r['Categoria']);
-    if(ALL.length===0)throw new Error('Nenhum lançamento na planilha ainda');
+    if(!ALL.length)throw new Error('Nenhum lançamento na planilha ainda');
     sl(95,'Montando dashboard...');
     render(ALL);sl(100,'Pronto!');hl();
   }catch(e){
     console.error(e);
     document.getElementById('eb').innerHTML='<div class="eb">Modo demo — '+e.message+'</div>';
-    ALL=[{'Data':'14/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Defensivo','Produto':'Atrazina','Quantidade':444,'Unidade':'kg','Área (ha)':450,'Valor Total':18500},{'Data':'12/04/2026','Cultura':'Soja','Talhão':'T-03','Categoria':'Defensivo','Produto':'Herbicida Select','Quantidade':120,'Unidade':'L','Área (ha)':600,'Valor Total':42000},{'Data':'10/04/2026','Cultura':'Soja','Talhão':'T-02','Categoria':'Fertilizante','Produto':'MAP Fertilizante','Quantidade':420,'Unidade':'kg','Área (ha)':800,'Valor Total':48600},{'Data':'08/04/2026','Cultura':'Algodão','Talhão':'T-04','Categoria':'Semente','Produto':'Sementes Soja RR','Quantidade':3200,'Unidade':'kg','Área (ha)':350,'Valor Total':96000},{'Data':'05/04/2026','Cultura':'Milho','Talhão':'T-05','Categoria':'Combustível','Produto':'Diesel','Quantidade':2000,'Unidade':'L','Área (ha)':300,'Valor Total':16800},{'Data':'02/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Fertilizante','Produto':'Uréia 46%','Quantidade':800,'Unidade':'kg','Área (ha)':450,'Valor Total':31200}];
+    ALL=[{'Data':'17/04/2026','Cultura':'Soja','Talhão':'T-01','Categoria':'Defensivo','Produto':'Roundup WG 720g','Área (ha)':800,'Valor Total':32000},{'Data':'15/04/2026','Cultura':'Milho','Talhão':'T-04','Categoria':'Fertilizante','Produto':'MAP Fertilizante','Área (ha)':350,'Valor Total':58800},{'Data':'13/04/2026','Cultura':'Soja','Talhão':'T-03','Categoria':'Semente','Produto':'TMG 7062 IPRO','Área (ha)':600,'Valor Total':96000},{'Data':'11/04/2026','Cultura':'Milho','Talhão':'T-05','Categoria':'Defensivo','Produto':'Pirate 240SC','Área (ha)':300,'Valor Total':55500},{'Data':'09/04/2026','Cultura':'Algodão','Talhão':'T-06','Categoria':'Defensivo','Produto':'Engeo Pleno','Área (ha)':420,'Valor Total':54600},{'Data':'06/04/2026','Cultura':'Soja','Talhão':'Geral','Categoria':'Combustível','Produto':'Diesel S10','Área (ha)':4200,'Valor Total':21000}];
     render(ALL);sl(100,'Demo');hl();
   }
 }
