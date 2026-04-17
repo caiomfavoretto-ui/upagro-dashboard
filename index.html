@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Up Agro Business — Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--verde:#1D9E75;--vl:#E1F5EE;--vd:#085041;--vm:#0F6E56;--am:#BA7517;--al:#FAEEDA;--co:#D85A30;--cl:#FAECE7;--bg:#F4F3EF;--wh:#fff;--tx:#1a1a18;--tm:#888780;--bd:rgba(0,0,0,0.09);--fn:'Syne',sans-serif;--mo:'DM Mono',monospace;--r:12px}
+:root{--verde:#1D9E75;--vl:#E1F5EE;--vd:#085041;--vm:#0F6E56;--am:#BA7517;--al:#FAEEDA;--co:#D85A30;--bg:#F4F3EF;--wh:#fff;--tx:#1a1a18;--tm:#888780;--bd:rgba(0,0,0,0.09);--fn:'Syne',sans-serif;--mo:'DM Mono',monospace;--r:12px}
 body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh}
 .topbar{background:var(--vd);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-size:14px;font-weight:700;color:#9FE1CB;letter-spacing:.12em;text-transform:uppercase}
@@ -44,7 +43,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
 .lic{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mo)}
 .lin{flex:1;min-width:0}
 .lp{font-size:13px;font-weight:500;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lm{font-family:var(--mo);font-size:10px;color:var(--tm);margin-top:1px}
+.lm2{font-family:var(--mo);font-size:10px;color:var(--tm);margin-top:1px}
 .lr{text-align:right;flex-shrink:0}
 .lt{font-family:var(--mo);font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--vl);color:var(--vd)}
 .ld2{font-family:var(--mo);font-size:10px;color:var(--tm);margin-top:2px}
@@ -59,24 +58,24 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
 .aw{background:var(--al);border-color:var(--am)}
 .ai{background:var(--vl);border-color:var(--verde)}
 .at{font-size:12px;font-weight:600;margin-bottom:2px}
-.aw .at{color:var(--am)}
-.ai .at{color:var(--vd)}
+.aw .at{color:var(--am)}.ai .at{color:var(--vd)}
 .ad{font-family:var(--mo);font-size:10px;color:#5F5E5A}
 .ls{position:fixed;inset:0;background:var(--vd);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s}
 .ls.hide{opacity:0;pointer-events:none}
 .ll2{font-size:18px;font-weight:700;color:#9FE1CB;letter-spacing:.15em;text-transform:uppercase;margin-bottom:32px}
 .lt2{width:200px;height:2px;background:rgba(255,255,255,.1);border-radius:1px;overflow:hidden}
 .lf{height:100%;background:var(--verde);border-radius:1px;width:0%;transition:width .3s}
-.lm2{font-family:var(--mo);font-size:11px;color:#5DCAA5;margin-top:16px}
+.lm3{font-family:var(--mo);font-size:11px;color:#5DCAA5;margin-top:16px}
 .footer{background:var(--vd);padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
 .fb{font-family:var(--mo);font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase}
 .fs{display:flex;align-items:center;gap:6px;font-family:var(--mo);font-size:10px;color:#5DCAA5}
 .eb{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;font-family:var(--mo);font-size:11px;color:#856404;margin-bottom:12px}
+.empty{text-align:center;padding:32px;color:var(--tm);font-family:var(--mo);font-size:12px}
 @media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}.g2,.g2b{grid-template-columns:1fr}.tg{grid-template-columns:repeat(2,1fr)}.content,.topbar,.filters,.hero{padding-left:16px;padding-right:16px}}
 </style>
 </head>
 <body>
-<div class="ls" id="ls"><div class="ll2">Up Agro Business</div><div class="lt2"><div class="lf" id="lf"></div></div><div class="lm2" id="lmsg">Conectando ao sistema...</div></div>
+<div class="ls" id="ls"><div class="ll2">Up Agro Business</div><div class="lt2"><div class="lf" id="lf"></div></div><div class="lm3" id="lmsg">Conectando ao sistema...</div></div>
 <div class="topbar"><div class="logo">Up Agro Business</div><div class="tbr"><div class="lb"><div class="ld"></div><span>LIVE</span></div><div class="si" id="si">—</div></div></div>
 <div class="hero"><div class="he">Produtor · Safra 2025/26</div><div class="hn" id="hn">Carregando...</div><div class="hm" id="hm">—</div></div>
 <div class="filters" id="flt"><button class="chip active" onclick="setF('todos',this)">Todas as culturas</button></div>
@@ -85,7 +84,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
   <div class="kpis" id="kpis"></div>
   <div class="g2">
     <div class="card"><div class="ct">Custo por categoria (R$/ha)</div><div style="position:relative;height:220px"><canvas id="cc" role="img" aria-label="Custo por categoria">Custo por categoria</canvas></div></div>
-    <div class="card"><div class="ct">Últimos lançamentos</div><div class="ll" id="ll"></div><div class="wf"><div class="wd"></div><span>Via WhatsApp + IA</span></div></div>
+    <div class="card"><div class="ct">Últimos lançamentos</div><div class="ll" id="lanclist"></div><div class="wf"><div class="wd"></div><span>Via WhatsApp + IA</span></div></div>
   </div>
   <div class="g2b">
     <div class="card"><div class="ct">Custo por talhão vs meta (R$/ha)</div><div style="position:relative;height:200px"><canvas id="tc2" role="img" aria-label="Custo por talhão">Custo por talhão</canvas></div></div>
@@ -94,19 +93,28 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
 </div>
 <div class="footer"><span class="fb">Up Agro Business &copy; 2026</span><div class="fs"><div class="ld"></div><span>Sistema ativo via WhatsApp</span></div></div>
 <script>
-const CFG={SHEET_ID:'1_nZYpTiWzBq39HJJ4PaeymtuqmaTR_6w_l50s_TWZ00',NOME:'João Carlos Mendes',FAZENDA:'Fazenda Progresso',HA:4200,MUN:'Sorriso, MT',META:1200,TALHOES:[{id:'T-01',ha:450},{id:'T-02',ha:800},{id:'T-03',ha:600},{id:'T-04',ha:350},{id:'T-05',ha:300},{id:'T-06',ha:420}]};
+const CFG={SHEET_ID:'1_nZYpTiWzBq39HJJ4PaeymtuqmaTR_6w_l50s_TWZ00',NOME:'João Carlos Mendes',FAZENDA:'Fazenda Taquaranta',HA:4200,MUN:'Sorriso, MT',META:1200,TALHOES:[{id:'T-01',ha:450},{id:'T-02',ha:800},{id:'T-03',ha:600},{id:'T-04',ha:350},{id:'T-05',ha:300},{id:'T-06',ha:420}]};
 const CR={'Defensivo':{bg:'#E1F5EE',tx:'#085041',b:'#1D9E75'},'Fertilizante':{bg:'#FAEEDA',tx:'#633806',b:'#BA7517'},'Semente':{bg:'#E6F1FB',tx:'#0C447C',b:'#378ADD'},'Combustível':{bg:'#FAECE7',tx:'#993C1D',b:'#D85A30'},'Mão de Obra':{bg:'#EEEDFE',tx:'#3C3489',b:'#7F77DD'},'Nutrição Foliar':{bg:'#EAF3DE',tx:'#27500A',b:'#639922'},'Outro':{bg:'#F1EFE8',tx:'#444441',b:'#888780'}};
-function cc(c){return CR[c]||CR['Outro']}
+function cc2(c){return CR[c]||CR['Outro']}
 let ALL=[],FA='todos',CC=null,TC=null;
 function sl(p,m){document.getElementById('lf').style.width=p+'%';document.getElementById('lmsg').textContent=m}
-function hl(){setTimeout(()=>document.getElementById('ls').classList.add('hide'),300)}
-function brl(n){return n||n===0?'R$ '+Math.round(n).toLocaleString('pt-BR'):'—'}
-function brh(n){return n||n===0?'R$ '+Math.round(n).toLocaleString('pt-BR')+'/ha':'—'}
+function hl(){setTimeout(()=>document.getElementById('ls').classList.add('hide'),400)}
+function brl(n){return(n||n===0)?'R$ '+Math.round(n).toLocaleString('pt-BR'):'—'}
+function brh(n){return(n||n===0)?'R$ '+Math.round(n).toLocaleString('pt-BR')+'/ha':'—'}
+function fmtData(v){
+  if(!v)return'—';
+  if(typeof v==='string')return v;
+  const m=String(v).match(/Date\((\d+),(\d+),(\d+)\)/);
+  if(m)return String(m[3]).padStart(2,'0')+'/'+(parseInt(m[2])+1).toString().padStart(2,'0')+'/'+m[1];
+  return String(v);
+}
 async function fa(a){
-  const r=await fetch('https://docs.google.com/spreadsheets/d/'+CFG.SHEET_ID+'/gviz/tq?tqx=out:json&sheet='+encodeURIComponent(a));
-  if(!r.ok)throw new Error('Planilha não acessível');
+  const url='https://docs.google.com/spreadsheets/d/'+CFG.SHEET_ID+'/gviz/tq?tqx=out:json&sheet='+encodeURIComponent(a);
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('Erro '+r.status);
   const t=await r.text();
-  const j=JSON.parse(t.replace(/^[^{]*/,'').replace(/\);?\s*$/,''));
+  const clean=t.replace(/^[^{]*/,'').replace(/[);\s]*$/,'');
+  const j=JSON.parse(clean);
   const cols=j.table.cols.map(c=>c.label);
   return j.table.rows.filter(r=>r&&r.c&&r.c.some(c=>c&&c.v!==null)).map(r=>{const o={};r.c.forEach((c,i)=>{o[cols[i]]=c?c.v:null});return o});
 }
@@ -129,7 +137,7 @@ function render(data){
     {l:'Lançamentos',v:nl,s:'Período atual',c:'#BA7517'}
   ].map(k=>'<div class="kpi"><div class="kl">'+k.l+'</div><div class="kv">'+k.v+'</div><div class="ks">'+k.s+'</div><div class="kb" style="background:'+k.c+'"></div></div>').join('');
   const pc={};d.forEach(l=>{const c=l['Categoria']||'Outro';const v=parseFloat(l['Valor Total'])||0;const h=parseFloat(l['Área (ha)'])||1;if(!pc[c])pc[c]={t:0,h:0};pc[c].t+=v;pc[c].h+=h});
-  const cl=Object.keys(pc),cv=cl.map(c=>pc[c].h>0?Math.round(pc[c].t/pc[c].h):0),cb=cl.map(c=>cc(c).b);
+  const cl=Object.keys(pc),cv=cl.map(c=>pc[c].h>0?Math.round(pc[c].t/pc[c].h):0),cb=cl.map(c=>cc2(c).b);
   if(CC)CC.destroy();
   CC=new Chart(document.getElementById('cc'),{type:'bar',data:{labels:cl,datasets:[{data:cv,backgroundColor:cb,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#888'}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#888',callback:v=>'R$'+v}}}}});
   const pt={};d.forEach(l=>{const t=l['Talhão']||'Geral';const v=parseFloat(l['Valor Total'])||0;const h=parseFloat(l['Área (ha)'])||1;if(!pt[t])pt[t]={t:0,h:0};pt[t].t+=v;pt[t].h+=h});
@@ -137,7 +145,7 @@ function render(data){
   if(TC)TC.destroy();
   TC=new Chart(document.getElementById('tc2'),{type:'bar',data:{labels:tl,datasets:[{data:tv,backgroundColor:tc,borderRadius:4,borderSkipped:false},{data:tl.map(()=>CFG.META),type:'line',borderColor:'#BA7517',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#888'}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#888',callback:v=>'R$'+v}}}}});
   const ul=[...d].reverse().slice(0,6);
-  document.getElementById('ll').innerHTML=ul.length===0?'<div style="text-align:center;padding:32px;color:var(--tm);font-family:var(--mo);font-size:12px">Nenhum lançamento</div>':ul.map(l=>{const c2=cc(l['Categoria']||'Outro');return '<div class="li" style="border-left-color:'+c2.b+'"><div class="lic" style="background:'+c2.bg+';color:'+c2.tx+'">'+(l['Categoria']||'Ou').substring(0,2).toUpperCase()+'</div><div class="lin"><div class="lp">'+(l['Produto']||'—')+'</div><div class="lm">'+(l['Quantidade']||'?')+' '+(l['Unidade']||'')+' · '+(l['Área (ha)']||'?')+' ha · '+(l['Cultura']||'—')+'</div></div><div class="lr"><div class="lt">'+(l['Talhão']||'Geral')+'</div><div class="ld2">'+(l['Data']||'—')+'</div></div></div>';}).join('');
+  document.getElementById('lanclist').innerHTML=ul.length===0?'<div class="empty">Nenhum lançamento</div>':ul.map(l=>{const c2=cc2(l['Categoria']||'Outro');return '<div class="li" style="border-left-color:'+c2.b+'"><div class="lic" style="background:'+c2.bg+';color:'+c2.tx+'">'+(l['Categoria']||'Ou').substring(0,2).toUpperCase()+'</div><div class="lin"><div class="lp">'+(l['Produto']||'—')+'</div><div class="lm2">'+(l['Quantidade']||'?')+' '+(l['Unidade']||'')+' · '+(l['Área (ha)']||'?')+' ha · '+(l['Cultura']||'—')+'</div></div><div class="lr"><div class="lt">'+(l['Talhão']||'Geral')+'</div><div class="ld2">'+fmtData(l['Data'])+'</div></div></div>';}).join('');
   const alts=[];tl.forEach((t,i)=>{if(tv[i]>CFG.META)alts.push({t:'warn',ti:'Meta ultrapassada — '+t,d:'R$ '+tv[i]+'/ha (meta: R$ '+CFG.META+'/ha)'})});
   if(alts.length===0)alts.push({t:'info',ti:'Custos dentro da meta',d:'Todos os talhões abaixo da meta'});
   document.getElementById('alts').innerHTML=alts.map(a=>'<div class="al a'+a.t+'"><div class="at">'+a.ti+'</div><div class="ad">'+a.d+'</div></div>').join('');
@@ -149,13 +157,15 @@ async function main(){
   try{
     sl(20,'Buscando lançamentos...');
     const rows=await fa('Saídas');
-    sl(60,'Processando...');
+    sl(70,'Processando...');
     ALL=rows.filter(r=>r['Produto']||r['Categoria']);
-    sl(90,'Montando dashboard...');
+    if(ALL.length===0)throw new Error('Nenhum lançamento na planilha ainda');
+    sl(95,'Montando dashboard...');
     render(ALL);sl(100,'Pronto!');hl();
   }catch(e){
-    document.getElementById('eb').innerHTML='<div class="eb">Modo demo — '+e.message+'<br><small>Para dados reais: Compartilhar planilha → Qualquer pessoa com o link → Leitor</small></div>';
-    ALL=[{'Data':'14/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Defensivo','Produto':'Atrazina','Quantidade':444,'Unidade':'kg','Área (ha)':450,'Valor Total':18500},{'Data':'12/04/2026','Cultura':'Soja','Talhão':'T-03','Categoria':'Defensivo','Produto':'Herbicida Select','Quantidade':120,'Unidade':'L','Área (ha)':600,'Valor Total':42000},{'Data':'10/04/2026','Cultura':'Soja','Talhão':'T-02','Categoria':'Fertilizante','Produto':'MAP Fertilizante','Quantidade':420,'Unidade':'kg','Área (ha)':800,'Valor Total':48600},{'Data':'08/04/2026','Cultura':'Algodão','Talhão':'T-04','Categoria':'Semente','Produto':'Sementes Soja RR','Quantidade':3200,'Unidade':'kg','Área (ha)':350,'Valor Total':96000},{'Data':'05/04/2026','Cultura':'Milho','Talhão':'T-05','Categoria':'Combustível','Produto':'Diesel','Quantidade':2000,'Unidade':'L','Área (ha)':300,'Valor Total':16800},{'Data':'02/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Fertilizante','Produto':'Uréia 46%','Quantidade':800,'Unidade':'kg','Área (ha)':450,'Valor Total':31200},{'Data':'28/03/2026','Cultura':'Soja','Talhão':'T-02','Categoria':'Mão de Obra','Produto':'Aplicação Aérea','Quantidade':1,'Unidade':'sv','Área (ha)':800,'Valor Total':12600}];
+    console.error(e);
+    document.getElementById('eb').innerHTML='<div class="eb">Modo demo — '+e.message+'</div>';
+    ALL=[{'Data':'14/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Defensivo','Produto':'Atrazina','Quantidade':444,'Unidade':'kg','Área (ha)':450,'Valor Total':18500},{'Data':'12/04/2026','Cultura':'Soja','Talhão':'T-03','Categoria':'Defensivo','Produto':'Herbicida Select','Quantidade':120,'Unidade':'L','Área (ha)':600,'Valor Total':42000},{'Data':'10/04/2026','Cultura':'Soja','Talhão':'T-02','Categoria':'Fertilizante','Produto':'MAP Fertilizante','Quantidade':420,'Unidade':'kg','Área (ha)':800,'Valor Total':48600},{'Data':'08/04/2026','Cultura':'Algodão','Talhão':'T-04','Categoria':'Semente','Produto':'Sementes Soja RR','Quantidade':3200,'Unidade':'kg','Área (ha)':350,'Valor Total':96000},{'Data':'05/04/2026','Cultura':'Milho','Talhão':'T-05','Categoria':'Combustível','Produto':'Diesel','Quantidade':2000,'Unidade':'L','Área (ha)':300,'Valor Total':16800},{'Data':'02/04/2026','Cultura':'Milho','Talhão':'T-01','Categoria':'Fertilizante','Produto':'Uréia 46%','Quantidade':800,'Unidade':'kg','Área (ha)':450,'Valor Total':31200}];
     render(ALL);sl(100,'Demo');hl();
   }
 }
