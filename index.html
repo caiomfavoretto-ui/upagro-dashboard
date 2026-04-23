@@ -215,8 +215,9 @@ async function main(){
     sl(20,'Buscando lançamentos...');
     const rows=await fetchAba('Saídas');
     sl(70,'Processando...');
-    ALL=rows.filter(r=>r['Produto']||r['Categoria']);
-    if(!ALL.length)throw new Error('Nenhum lançamento na planilha ainda');
+    const fazNames=new Set(CFG.FAZENDAS.map(f=>norm(f.nome)));
+    ALL=rows.filter(r=>(r['Produto']||r['Categoria'])&&fazNames.has(norm(r['Fazenda'])));
+    if(!ALL.length)throw new Error('Nenhum lançamento das fazendas configuradas ainda');
     sl(95,'Montando dashboard...');
     render(ALL);sl(100,'Pronto!');hl();
   }catch(e){
